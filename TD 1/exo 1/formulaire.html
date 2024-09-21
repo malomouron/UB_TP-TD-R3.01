@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form action="script.php" method="post">
+    <label for="nom">Nom</label>
+    <input type="text" id="nom" name="nom">
+
+    <label for="prenom">Prenom</label>
+    <input type="text" id="prenom" name="prenom"><br><br>
+
+
+
+    <label for="select">Select</label>
+    <select name="select" id="select">
+      <option value="enfant">enfant</option>
+      <option value="ado">ado</option>
+        <option value="adulte">adulte</option>
+    </select><br><br>
+
+    <label for="radio">Radio</label>
+    <input type="radio" id="radio" name="radio" value="étudiant">
+    <label for="radio2">Radio 2</label>
+    <input type="radio" id="radio2" name="radio" value="salarié">
+
+    <input type="hidden" name="hidden">
+    <input type="submit" value="Envoyer">
+  </form>
+</body>
+</html>
