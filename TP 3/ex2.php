@@ -8,31 +8,30 @@ if (!isset($_SESSION['input_value'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['C'])) {
-        $_SESSION['input_value'] = '';
-    } elseif (isset($_POST['CE'])) {
-        $_SESSION['input_value'] = substr($_SESSION['input_value'], 0, -1);
-    } elseif (isset($_POST['btn'])) {
-        $_SESSION['input_value'] .= $_POST['btn'];
-    } elseif (isset($_POST['btnAdd'])) {
-        $_SESSION['input_value'] .= $_POST['btnAdd'].'h(';
-    } elseif (isset($_POST['sqrt'])) {
-        $_SESSION['input_value'] .= 'sqrt(';
-    } elseif (isset($_POST['abs'])) {
-        $_SESSION['input_value'] .= 'abs(';
-    } elseif (isset($_POST['exp'])) {
-        $_SESSION['input_value'] .= 'exp(';
-    }
-    else
-    if (isset($_POST['='])) {
-        try {
-            $result = eval('return ' . $_SESSION['input_value'] . ';');
+    $inputActions = [
+        'C' => function() { $_SESSION['input_value'] = ''; },
+        'CE' => function() { $_SESSION['input_value'] = substr($_SESSION['input_value'], 0, -1); },
+        'btn' => function() { $_SESSION['input_value'] .= $_POST['btn']; },
+        'btnAdd' => function() { $_SESSION['input_value'] .= $_POST['btnAdd'] . 'h('; },
+        'sqrt' => function() { $_SESSION['input_value'] .= 'sqrt('; },
+        'abs' => function() { $_SESSION['input_value'] .= 'abs('; },
+        'exp' => function() { $_SESSION['input_value'] .= 'exp('; },
+        '=' => function() {
+            try {
+                $result = eval('return ' . $_SESSION['input_value'] . ';');
+            } catch (ParseError $e) {
+                $result = 'Syntax Error';
+            } finally {
+                $_SESSION['input_value'] = $result;
+                $_SESSION['is_result'] = true;
+            }
         }
-        catch (ParseError $e) {
-            $result = 'Syntax Error';
-        } finally {
-            $_SESSION['input_value'] = $result;
-            $_SESSION['is_result'] = true;
+    ];
+
+    foreach ($inputActions as $key => $action) {
+        if (isset($_POST[$key])) {
+            $action();
+            break;
         }
     }
 }
