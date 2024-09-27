@@ -3,21 +3,31 @@ require_once 'my_custom_autoloader.php';
 spl_autoload_register('my_custom_autoloader');
 session_start();
 
-
+/**
+ * Vérifie si une session de personnage est active.
+ */
 if (isset($_SESSION['perso']))
 {
+    // Connexion à la base de données
     $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '^cGWtch*I!q7Q5**v');
     $gestionPerso = new PersonnageManager($bdd);
 
+    /**
+     * Gère les actions du formulaire POST.
+     */
     if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
+        // Vérifie si une cible a été sélectionnée
         if (isset($_POST['cible']) && !empty($_POST['cible']))
         {
+            // Vérifie si la cible existe
             if ($gestionPerso->exists($_POST['cible']))
             {
                 $perso = $gestionPerso->get($_POST['cible']);
                 $degaprec = $perso->getDegats();
                 $act = $_SESSION['perso']->frapper($perso);
+
+                // Gère les différents cas d'action
                 switch ($act)
                 {
                     case Personnage::CEST_MOI:
@@ -25,15 +35,13 @@ if (isset($_SESSION['perso']))
                         break;
                     case Personnage::PERSONNAGE_FRAPPE:
                         $mess = 'Le personnage a bien été frappé'.'<br>'.'Degats : ' . ($perso->getDegats() - $degaprec);
-
-                        echo $gestionPerso->update($perso);
-                        echo $gestionPerso->update($_SESSION['perso']);
-
+                        $gestionPerso->update($perso);
+                        $gestionPerso->update($_SESSION['perso']);
                         break;
                     case Personnage::PERSONNAGE_TUE:
                         $mess = 'Le personnage a bien été tué'.'<br>'.'Degats : ' . ($perso->getDegats() - $degaprec);
                         $gestionPerso->delete($perso);
-                        echo $gestionPerso->update($_SESSION['perso']);
+                        $gestionPerso->update($_SESSION['perso']);
                         break;
                     case Personnage::COUPS_MAX:
                         $mess = 'Vous avez atteint le nombre maximum de coups portés';
@@ -68,6 +76,9 @@ echo '
         <p>Coups portés : ' . $_SESSION['perso']->getCoupsPortes()  . '</p>
         <p>Date dernier coup : ';
 
+        /**
+         * Affiche la date du dernier coup porté.
+         */
         if ($_SESSION['perso']->getDateDernierCoup() === null)
         {
             echo 'Aucun coup porté';
@@ -113,4 +124,4 @@ echo '
 </div>
 </body>
 </html>';
-
+?>

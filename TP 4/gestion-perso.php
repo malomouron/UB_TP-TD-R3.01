@@ -3,10 +3,17 @@ session_start();
 require_once 'my_custom_autoloader.php';
 spl_autoload_register('my_custom_autoloader');
 
+/**
+ * Gère les requêtes POST pour la création ou l'utilisation d'un personnage.
+ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+    // Connexion à la base de données
     $bdd = new PDO('mysql:host=localhost;dbname=test;charset=utf8', 'root', '^cGWtch*I!q7Q5**v');
     $gestionPerso = new PersonnageManager($bdd);
+
+    // Vérifie si un bouton a été cliqué
     if (isset($_POST['btn'])){
+        // Gère la création d'un nouveau personnage
         if ($_POST['btn'] === 'Créer ce personnage'){
             $nom = $_POST['nom'];
             if ($nom && !ctype_digit($nom) && !empty($nom)) {
@@ -29,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 echo '<a href="index.php">Retourner à l\'index</a>';
             }
         }
+
+        // Gère l'utilisation d'un personnage existant
         if ($_POST['btn'] === 'Utiliser ce personnage'){
             $nom = $_POST['nom'];
             if ($nom && !is_int($nom) && !empty($nom)) {
@@ -70,3 +79,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
         }
     }
 }
+?>

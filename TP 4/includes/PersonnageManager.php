@@ -9,8 +9,15 @@ declare(strict_types=1);
  */
 class PersonnageManager
 {
-    private const TABLE_NAME = 'ub_personnages'; // Nom de la table dans la base de données
-    private $_db; // Instance de PDO pour la connexion à la base de données
+    /**
+     * Nom de la table dans la base de données.
+     */
+    private const TABLE_NAME = 'ub_personnages';
+
+    /**
+     * Instance de PDO pour la connexion à la base de données.
+     */
+    private $_db;
 
     /**
      * Constructeur
@@ -106,6 +113,11 @@ class PersonnageManager
         }
     }
 
+    /**
+     * Récupère la liste des personnages de la base de données
+     *
+     * @return array Tableau d'instances de Personnage
+     */
     public function getList() : array
     {
         $persos = [];

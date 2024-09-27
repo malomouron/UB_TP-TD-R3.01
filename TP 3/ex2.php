@@ -2,11 +2,17 @@
 
 session_start();
 
+/**
+ * Initialise les variables de session si elles ne sont pas déjà définies.
+ */
 if (!isset($_SESSION['input_value'])) {
     $_SESSION['input_value'] = '';
     $_SESSION['is_result'] = false;
 }
 
+/**
+ * Gère les actions en fonction des boutons soumis via le formulaire.
+ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inputActions = [
         'C' => function() { $_SESSION['input_value'] = ''; },
@@ -28,6 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     ];
 
+    /**
+     * Exécute l'action associée au bouton soumis.
+     */
     foreach ($inputActions as $key => $action) {
         if (isset($_POST[$key])) {
             $action();
@@ -87,5 +96,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </body>
 </html>
-
-
