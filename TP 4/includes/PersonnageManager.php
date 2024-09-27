@@ -37,9 +37,9 @@ class PersonnageManager
      */
     public function add(Personnage $perso) : void
     {
-        $q = $this->_db->prepare('INSERT INTO '.self::TABLE_NAME.'(nom, date_derniere_connexion) VALUES(:nom, :date_derniere_connexion)');
+        $q = $this->_db->prepare('INSERT INTO '.self::TABLE_NAME.'(nom, dateDerniereConnexion) VALUES(:nom, :dateDerniereConnexion)');
         $q->bindValue(':nom', $perso->getNom(), PDO::PARAM_STR);
-        $q->bindValue(':date_derniere_connexion', (new DateTime())->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $q->bindValue(':dateDerniereConnexion', (new DateTime())->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         echo  $q->execute();
 
         $perso->hydrate([
@@ -102,11 +102,11 @@ class PersonnageManager
     public function get($info) : Personnage
     {
         if (is_int($info)) {
-            $q = $this->_db->query('SELECT id, nom, degats, experience, coups_portes as CoupsPortes, date_dernier_coup as DateDernierCoup, date_derniere_connexion as DateDerniereConnexion FROM '.self::TABLE_NAME.' WHERE id = '.$info);
+            $q = $this->_db->query('SELECT id, nom, degats, experience, coupsPortes, dateDernierCoup, dateDerniereConnexion FROM '.self::TABLE_NAME.' WHERE id = '.$info);
             $donnees = $q->fetch(PDO::FETCH_ASSOC);
             return new Personnage($donnees);
         } else {
-            $q = $this->_db->prepare('SELECT id, nom, degats, experience, coups_portes as CoupsPortes, date_dernier_coup as DateDernierCoup, date_derniere_connexion as DateDerniereConnexion FROM '.self::TABLE_NAME.' WHERE nom = :nom');
+            $q = $this->_db->prepare('SELECT id, nom, degats, experience, coupsPortes , dateDernierCoup, dateDerniereConnexion FROM '.self::TABLE_NAME.' WHERE nom = :nom');
             $q->bindValue(':nom', $info, PDO::PARAM_STR);
             $q->execute();
             return new Personnage($q->fetch(PDO::FETCH_ASSOC));
@@ -121,7 +121,7 @@ class PersonnageManager
     public function getList() : array
     {
         $persos = [];
-        $q = $this->_db->query('SELECT id, nom, degats, experience, coups_portes, date_dernier_coup, date_derniere_connexion FROM '.self::TABLE_NAME.' ORDER BY nom');
+        $q = $this->_db->query('SELECT id, nom, degats, experience, coupsPortes, dateDernierCoup, dateDerniereConnexion FROM '.self::TABLE_NAME.' ORDER BY nom');
         while ($donnees = $q->fetch(PDO::FETCH_ASSOC)) {
             $persos[] = new Personnage($donnees);
         }
@@ -136,15 +136,15 @@ class PersonnageManager
      */
     public function update(Personnage $perso): void
     {
-        $q = $this->_db->prepare('UPDATE '.self::TABLE_NAME.' SET degats = :degats, nom = :nom, experience = :experience, coups_portes = :coups_portes, date_dernier_coup = :date_dernier_coup, date_derniere_connexion = :date_derniere_connexion WHERE id = :id');
+        $q = $this->_db->prepare('UPDATE '.self::TABLE_NAME.' SET degats = :degats, nom = :nom, experience = :experience, coupsPortes = :coupsPortes, dateDernierCoup = :dateDernierCoup, dateDerniereConnexion = :dateDerniereConnexion WHERE id = :id');
 
         $boundParams = [
             ':degats' => $perso->getDegats(),
             ':nom' => $perso->getNom(),
             ':experience' => $perso->getExperience(),
-            ':coups_portes' => $perso->getCoupsPortes(),
-            ':date_dernier_coup' => $perso->getDateDernierCoup() && $perso->getDateDernierCoup() !== '' ? $perso->getDateDernierCoup()->format('Y-m-d H:i:s') : null,
-            ':date_derniere_connexion' => $perso->getDateDerniereConnexion()->format('Y-m-d H:i:s'),
+            ':coupsPortes' => $perso->getCoupsPortes(),
+            ':dateDernierCoup' => $perso->getDateDernierCoup() && $perso->getDateDernierCoup() !== '' ? $perso->getDateDernierCoup()->format('Y-m-d H:i:s') : null,
+            ':dateDerniereConnexion' => $perso->getDateDerniereConnexion()->format('Y-m-d H:i:s'),
             ':id' => $perso->getId()
         ];
 

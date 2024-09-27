@@ -66,7 +66,7 @@ echo '
 </head>
 <body>
 <div class="container">
-    <fieldset>
+    <fieldset class="info-box">
         <legend>Mes informations</legend>
         <p>Nom : ' . $_SESSION['perso']->getNom() . '</p>
         <p>Dégâts : ' . $_SESSION['perso']->getDegats() . '</p>
@@ -91,7 +91,7 @@ echo '
         <p>Date dernière connexion : ' . $_SESSION['perso']->getDateDerniereConnexion()->format('Y-m-d H:i:s') . '</p>
 
     </fieldset>
-    <form action="combat.php" method="post">
+    <form action="combat.php" method="post" class="combat-form">
         <label for="cible">Cible :</label>
         <select name="cible" id="cible">';
             $persos = $gestionPerso->getList();
@@ -102,7 +102,7 @@ echo '
             }
             echo '
         </select>
-        <input type="submit" name="btn" value="Frapper">
+        <input type="submit" name="btn" value="Frapper" class="btn-attack">
     </form>
     <p>';
     if (isset($mess)){
@@ -120,7 +120,7 @@ echo '
     echo
     '</p>
     <p>Il reste '.  $gestionPerso->count()  .' personnages</p>
-    <a href="index.php?deco=1">Annuler et retourner à l\'index</a>
+    <a href="index.php?deco=1" class="back-link">Annuler et retourner à l\'index</a>
 </div>
 </body>
 </html>';

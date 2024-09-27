@@ -3,6 +3,17 @@ session_start();
 require_once 'my_custom_autoloader.php';
 spl_autoload_register('my_custom_autoloader');
 
+
+echo '
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini jeu de Combat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">';
 /**
  * Gère les requêtes POST pour la création ou l'utilisation d'un personnage.
  */
@@ -28,12 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     echo '<br>';
                     echo 'Veuillez choisir un autre nom';
                     echo '<br>';
-                    echo '<a href="index.php">Retourner à l\'index</a>';
+                    echo '<a href="index.php" class="btn return">Retourner à l\'index</a>';
                 }
             } else {
                 echo 'Nom invalide';
                 echo '<br>';
-                echo '<a href="index.php">Retourner à l\'index</a>';
+                echo '<a href="index.php" class="btn return">Retourner à l\'index</a>';
             }
         }
 
@@ -51,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                             echo '<br>';
                             echo 'Veuillez choisir un autre nom';
                             echo '<br>';
-                            echo '<a href="index.php">Retourner à l\'index</a>';
+                            echo '<a href="index.php" class="btn return">Retourner à l\'index</a>';
                             $gestionPerso->delete($_SESSION['perso']);
                             break;
                         case Personnage::PERSONNAGE_CONNEXION_OK:
@@ -69,14 +80,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                     echo '<br>';
                     echo 'Veuillez choisir un autre nom';
                     echo '<br>';
-                    echo '<a href="index.php">Retourner à l\'index</a>';
+                    echo '<a href="index.php" class="btn return">Retourner à l\'index</a>';
                 }
             } else {
                 echo 'Nom invalide';
                 echo '<br>';
-                echo '<a href="index.php">Retourner à l\'index</a>';
+                echo '<a href="index.php" class="btn return">Retourner à l\'index</a>';
             }
         }
     }
 }
+
+echo '
+</div>
+</body>
+</html>';
 ?>

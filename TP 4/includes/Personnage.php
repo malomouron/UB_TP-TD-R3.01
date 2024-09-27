@@ -71,17 +71,17 @@ class Personnage
     /**
      * Nombre de coups portés par le personnage.
      */
-    private int $coups_portes;
+    private int $coupsPortes;
 
     /**
      * Date du dernier coup porté par le personnage.
      */
-    private ?DateTime $date_dernier_coup;
+    private ?DateTime $dateDernierCoup;
 
     /**
      * Date de la dernière connexion du personnage.
      */
-    private ?DateTime $date_derniere_connexion;
+    private ?DateTime $dateDerniereConnexion;
 
     /**
      * Retourne l'identifiant du personnage.
@@ -136,32 +136,32 @@ class Personnage
     /**
      * Retourne le nombre de coups portés par le personnage.
      */
-    public function getCoupsPortes(): int { return $this->coups_portes; }
+    public function getCoupsPortes(): int { return $this->coupsPortes; }
 
     /**
      * Définit le nombre de coups portés par le personnage.
      */
-    public function setCoupsPortes(int $coups_portes): void { $this->coups_portes = $coups_portes; }
+    public function setCoupsPortes(int $coups_portes): void { $this->coupsPortes = $coups_portes; }
 
     /**
      * Retourne la date du dernier coup porté par le personnage.
      */
-    public function getDateDernierCoup(): ?DateTime { return $this->date_dernier_coup; }
+    public function getDateDernierCoup(): ?DateTime { return $this->dateDernierCoup; }
 
     /**
      * Définit la date du dernier coup porté par le personnage.
      */
-    public function setDateDernierCoup(?DateTime $date_dernier_coup): void { $this->date_dernier_coup = $date_dernier_coup; }
+    public function setDateDernierCoup(?DateTime $date_dernier_coup): void { $this->dateDernierCoup = $date_dernier_coup; }
 
     /**
      * Retourne la date de la dernière connexion du personnage.
      */
-    public function getDateDerniereConnexion(): ?DateTime { return $this->date_derniere_connexion; }
+    public function getDateDerniereConnexion(): ?DateTime { return $this->dateDerniereConnexion; }
 
     /**
      * Définit la date de la dernière connexion du personnage.
      */
-    public function setDateDerniereConnexion(?DateTime $date_derniere_connexion): void { $this->date_derniere_connexion = $date_derniere_connexion; }
+    public function setDateDerniereConnexion(?DateTime $date_derniere_connexion): void { $this->dateDerniereConnexion = $date_derniere_connexion; }
 
     /**
      * Frappe un autre personnage et retourne le résultat de l'action.
@@ -171,11 +171,11 @@ class Personnage
         if ($personnage->getId() == $this->id) {
             return self::CEST_MOI;
         }
-        if ($this->coups_portes >= 3 && $this->date_dernier_coup->format('Y-m-d') == (new DateTime())->format('Y-m-d')) {
+        if ($this->coupsPortes >= 3 && $this->dateDernierCoup->format('Y-m-d') == (new DateTime())->format('Y-m-d')) {
             return self::COUPS_MAX; // Ou une autre constante indiquant que la limite est atteinte
         }
-        $this->coups_portes++;
-        $this->date_dernier_coup = new DateTime();
+        $this->coupsPortes++;
+        $this->dateDernierCoup = new DateTime();
         return $personnage->recevoirDegats($this->getForce());
     }
 
@@ -203,11 +203,11 @@ class Personnage
     public function checkConnexion(): int
     {
         $now = new DateTime();
-        if ($this->date_derniere_connexion->diff($now)->days > 0) {
+        if ($this->dateDerniereConnexion->diff($now)->days > 0) {
             return self::PERSONNAGE_CONNEXION_NEW_DAY;
-        } elseif ($this->date_derniere_connexion->diff($now)->days == 0) {
+        } elseif ($this->dateDerniereConnexion->diff($now)->days == 0) {
             $this->degats += 10;
-            $this->date_derniere_connexion = $now;
+            $this->dateDerniereConnexion = $now;
         }
         return $this->isDead() ? self::PERSONNAGE_TUE : self::PERSONNAGE_CONNEXION_OK;
     }
@@ -221,10 +221,14 @@ class Personnage
             if (is_string($key)) {
                 $method = 'set' . ucfirst($key);
                 if (method_exists($this, $method)) {
-                    if ($key === 'id' || $key === 'degats'  || $key === 'experience' || $key === 'CoupsPortes') {
-                        $value = (int) $value;
-                    } elseif ($key === 'DateDernierCoup' || $key === 'DateDerniereConnexion') {
-                        $value = $value === null ? null : new DateTime($value);
+                    if ($key === 'id' || $key === 'degats'  || $key === 'experience' || $key === 'coupsPortes') {
+                        $value = intval( $value);
+                    } elseif ($key === 'dateDernierCoup' || $key === 'dateDerniereConnexion') {
+                        if ($value === null) {
+                            $value = null;
+                        } else {
+                            $value = new DateTime();
+                        }
                     }
                     $this->$method($value);
                 }
