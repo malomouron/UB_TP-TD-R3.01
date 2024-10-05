@@ -15,7 +15,7 @@ class UnitDAO extends BasePDODAO {
         $stmt = $this->execRequest($query);
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $units[] = new Unit($row['id'], $row['name'], (int) $row['cost'], $row['origin'], $row['url_img']);
+            $units[] = new Unit(["id" => $row['id'], "name" => $row['name'], "cost" => (int) $row['cost'], "origin" => $row['origin'], "urlImg" => $row['url_img']]);
         }
 
         return $units;
@@ -27,7 +27,7 @@ class UnitDAO extends BasePDODAO {
         $stmt = $this->execRequest($query, ['id' => $idUnit]);
 
         if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            return new Unit($row['id'], $row['name'], (int) $row['cost'], $row['origin'], $row['url_img']);
+            return new Unit(["id" => $row['id'], "name" => $row['name'], "cost" => (int) $row['cost'], "origin" => $row['origin'], "urlImg" => $row['url_img']]);
         }
 
         return null; // Retourne null si l'ID n'est pas trouvé
