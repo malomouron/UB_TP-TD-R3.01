@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Controllers\Router;
 
 use Controllers\MainController;
-use Controllers\Router\Route\RouteIndex;
 use Controllers\Router\Route\RouteAddUnit;
+use Controllers\Router\Route\RouteIndex;
+use Controllers\Router\Route\RouteSearch;
+use Controllers\Router\Route\RouteAddOrigin;
 use Controllers\UnitController;
 use Exception;
 
@@ -40,6 +42,8 @@ class Router
         $this->routeList = [
             'index' => new RouteIndex($this->ctrlList['main']),
             'add-unit' => new RouteAddUnit($this->ctrlList['unit']),
+            'search' => new RouteSearch($this->ctrlList['main']),
+            'add-origin' => new RouteAddOrigin($this->ctrlList['unit']),
         ];
     }
 

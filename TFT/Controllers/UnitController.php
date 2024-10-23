@@ -18,4 +18,9 @@ class UnitController {
     {
         echo $this->engine->render('add-unit');
     }
+
+    public function displayAddOrigin()
+    {
+        echo $this->engine->render('add-origin');
+    }
 }

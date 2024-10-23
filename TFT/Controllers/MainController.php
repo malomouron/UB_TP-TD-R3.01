@@ -27,4 +27,9 @@ class MainController {
             'reGetByIdDontExist' => $unitByIdDoesNotExist
         ]);
     }
+
+    public function displaySearch() : void
+    {
+        echo $this->engine->render('search');
+    }
 }
