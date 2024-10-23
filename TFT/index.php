@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Models\UnitDAO;
-
 require_once __DIR__ . '/Helpers/Psr4AutoloaderClass.php';
 
 $loader = new \Helpers\Psr4AutoloaderClass();
@@ -12,16 +10,9 @@ $loader->addNamespace('\League\Plates', __DIR__ . '/Vendor/Plates/src');
 $loader->addNamespace('\Controllers', __DIR__ . '/Controllers');
 $loader->addNamespace('\Models', __DIR__ . '/Models');
 $loader->addNamespace('\Config', __DIR__ . '/Config');
+$loader->addNamespace('\Controllers\Router', __DIR__ . '/Controllers/Router');
 
 $templates = new \League\Plates\Engine(__DIR__ . '/Views');
 
-$controller = new \Controllers\MainController($templates);
-
-
-$unitDAO = new UnitDAO();
-
-$allUnits = $unitDAO->getAll();
-$unitByIdExists = $unitDAO->getByID('1');
-$unitByIdDoesNotExist = $unitDAO->getByID("idQuiNexistePas");
-
-$controller->index($allUnits, $unitByIdExists, $unitByIdDoesNotExist);
+$router = new \Controllers\Router\Router($templates);
+$router->routing($_GET, $_POST);

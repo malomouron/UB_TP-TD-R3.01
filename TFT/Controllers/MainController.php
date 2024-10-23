@@ -8,19 +8,23 @@ use Models\UnitDAO;
 
 class MainController {
     private Engine $engine;
-
+    private UnitDAO $unitDAO;
     public function __construct(Engine $engine) {
         $this->engine = $engine;
+        $this->unitDAO = new UnitDAO();
     }
 
-    public function index($resGetAll, $resGetByID, $reGetByIdDontExist) : void {
+    public function index() : void {
+        $allUnits = $this->unitDAO->getAll();
+        $unitByIdExists = $this->unitDAO->getByID('1');
+        $unitByIdDoesNotExist = $this->unitDAO->getByID("idQuiNexistePas");
 
         echo $this->engine->render('home',
             [
                 'tftSetName' => 'Remix Rumble',
-                'resGetAll' => $resGetAll,
-                'resGetByID' => $resGetByID,
-                'reGetByIdDontExist' => $reGetByIdDontExist
+                'resGetAll' => $allUnits,
+                'resGetByID' => $unitByIdExists,
+                'reGetByIdDontExist' => $unitByIdDoesNotExist
             ]);
     }
 }

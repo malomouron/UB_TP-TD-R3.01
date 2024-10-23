@@ -2,31 +2,31 @@
 $this->layout('template', ['title' => 'TP TFT']);
 ?>
 <h1>TFT - Set <?= $this->e($tftSetName) ?></h1>
-<h2>Résultat de getAll():</h2>
-<span>
-<?php
-foreach ($resGetAll as $unit) {
-    echo "ID: " . $unit->getId() . " - Name: " . $unit->getName() . " - Cost: " . $unit->getCost() . "<br>";
-}
-?>
-</span>
-<h2>Résultat de getByID(idQuiExiste):</h2>
-<span>
-<?php
-if ($resGetByID) {
-    echo "ID: " . $resGetByID->getId() . " - Name: " . $resGetByID->getName() . " - Cost: " . $resGetByID->getCost() . "<br>";
-} else {
-    echo "Unité avec ID 'idQuiExiste' non trouvée.<br>";
-}
-?>
-</span>
-<h2>Résultat de getByID(idQuiNexistePas):</h2>
-<span>
-<?php
-if ($reGetByIdDontExist) {
-    echo "ID: " . $reGetByIdDontExist->getId() . " - Name: " . $reGetByIdDontExist->getName() . " - Cost: " . $reGetByIdDontExist->getCost() . "<br>";
-} else {
-    echo "Unité avec ID 'idQuiNexistePas' non trouvée.<br>";
-}
-?>
-</span>
+
+<div id="contenair_card">
+    <?php
+    if ($resGetAll) {
+        foreach ($resGetAll as $unit) {
+            echo '
+        <div class="card">
+            <div class="card-header">
+                <button class="edit-btn"><a href="index.php?action=edit-unit&id='.$unit->getId().'">✏️</a></button>
+                <button class="delete-btn"><a href="index.php?action=del-unit&id='.$unit->getId().'">🗑️</a></button>
+            </div>
+            <img src="public/img/'.$unit->getUrlImg().'" alt="'.$unit->getName().'" class="card-image">
+            <div class="card-body">
+                <div class="abilities">
+                    <p>🗡️'.$unit->getOrigin().'</p>
+                    <p>🗡️'.$unit->getOrigin().'</p>
+                    <p>🗡️'.$unit->getOrigin().'</p>
+                </div>
+                <div class="card-footer">
+                    <h4>'.$unit->getName().'</h4>
+                    <span class="cost">'.$unit->getCost().'</span>
+                </div>
+            </div>
+        </div>';
+        }
+    }
+    ?>
+</div>

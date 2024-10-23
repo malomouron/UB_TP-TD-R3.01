@@ -1,9 +1,8 @@
 <?php
 
-namespace Models;
+declare(strict_types=1);
 
-use Models\BasePDODAO;
-use Models\Unit;
+namespace Models;
 use PDO;
 
 class UnitDAO extends BasePDODAO {
