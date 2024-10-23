@@ -12,7 +12,7 @@ $loader->addNamespace('\Models', __DIR__ . '/Models');
 $loader->addNamespace('\Config', __DIR__ . '/Config');
 $loader->addNamespace('\Controllers\Router', __DIR__ . '/Controllers/Router');
 
-$templates = new \League\Plates\Engine(__DIR__ . '/Views');
+$engine = new \League\Plates\Engine(__DIR__ . '/Views');
 
-$router = new \Controllers\Router\Router($templates);
+$router = new \Controllers\Router\Router($engine);
 $router->routing($_GET, $_POST);

@@ -42,9 +42,9 @@ templates/
 The following looks ups, *regardless of where they are called from*, would resolve to the following files:
 
 ```php
-$templates->render('home'); // templates/main/home.php
-$templates->render('layout'); // templates/user/layout.php
-$templates->render('header'); // templates/seasonal/header.php
+$engine->render('home'); // templates/main/home.php
+$engine->render('layout'); // templates/user/layout.php
+$engine->render('header'); // templates/seasonal/header.php
 ```
 
 All paths are resolved from the last child to the first parent allowing a hierarchy of overrides.

@@ -19,7 +19,6 @@
 </header>
 <main id="contenu">
     <?=$this->section('content')?>
-
 </main>
 <footer>
 </footer>

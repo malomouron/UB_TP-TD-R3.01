@@ -20,11 +20,11 @@ class MainController {
         $unitByIdDoesNotExist = $this->unitDAO->getByID("idQuiNexistePas");
 
         echo $this->engine->render('home',
-            [
-                'tftSetName' => 'Remix Rumble',
-                'resGetAll' => $allUnits,
-                'resGetByID' => $unitByIdExists,
-                'reGetByIdDontExist' => $unitByIdDoesNotExist
-            ]);
+        [
+            'tftSetName' => 'Remix Rumble',
+            'resGetAll' => $allUnits,
+            'resGetByID' => $unitByIdExists,
+            'reGetByIdDontExist' => $unitByIdDoesNotExist
+        ]);
     }
 }

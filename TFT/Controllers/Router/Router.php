@@ -6,6 +6,9 @@ namespace Controllers\Router;
 
 use Controllers\MainController;
 use Controllers\Router\Route\RouteIndex;
+use Controllers\Router\Route\RouteAddUnit;
+use Controllers\UnitController;
+use Exception;
 
 class Router
 {
@@ -14,12 +17,12 @@ class Router
     private $ctrlList = [];   // Liste des contrôleurs (ex: 'main' => MainController)
     private $action_key;      // La clé d'action dans $_GET, par défaut "action"
 
-    private $template;        // Moteur de templates
+    private $engine;        // Moteur de templates
 
     public function __construct($template, $name_of_action_key = 'action')
     {
         $this->action_key = $name_of_action_key;
-        $this->template = $template;
+        $this->engine = $template;
         $this->createControllerList();
         $this->createRouteList();
     }
@@ -27,7 +30,8 @@ class Router
     private function createControllerList()
     {
         $this->ctrlList = [
-            'main' => new MainController($this->template),
+            'main' => new MainController($this->engine),
+            'unit' => new UnitController($this->engine),
         ];
     }
 
@@ -35,6 +39,7 @@ class Router
     {
         $this->routeList = [
             'index' => new RouteIndex($this->ctrlList['main']),
+            'add-unit' => new RouteAddUnit($this->ctrlList['unit']),
         ];
     }
 
