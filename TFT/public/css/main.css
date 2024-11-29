@@ -1,6 +1,20 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0;  /* Fond clair pour mieux voir la carte */
+    font-family: 'Friz Quadrata', sans-serif; /* League of Legends-like font */
+    background: linear-gradient(135deg, #0a0a0a 25%, #1c1c1c 25%, #1c1c1c 50%, #0a0a0a 50%, #0a0a0a 75%, #1c1c1c 75%, #1c1c1c 100%);
+    background-size: 56.57px 56.57px;
+    animation: backgroundAnimation 10s linear infinite;
+    color: #d4af37; /* Gold text */
+    margin: 0;
+    padding: 0;
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 56.57px 56.57px;
+    }
 }
 
 .card {
@@ -88,4 +102,213 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Friz Quadrata', sans-serif;
+    color: #d4af37;
+}
+
+a {
+    color: #d4af37;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #f1c40f;
+}
+
+button {
+    background-color: #d4af37;
+    color: #0a0a0a;
+    border: 2px solid #d4af37;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-family: 'Friz Quadrata', sans-serif;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #f1c40f;
+    border-color: #f1c40f;
+}
+
+.card {
+    background-color: #1c1c1c; /* Couleur de fond sombre */
+    border: 2px solid #d4af37; /* Bordure dorée */
+    border-radius: 10px;
+    color: #d4af37;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    margin: 20px;
+    padding: 20px;
+}
+
+.card-header, .card-body, .card-footer {
+    margin-bottom: 10px;
+}
+
+.card-header {
+    font-size: 1.5em;
+    border-bottom: 1px solid #d4af37;
+    padding-bottom: 10px;
+}
+
+.card-body {
+    font-size: 1em;
+}
+
+.card-footer {
+    font-size: 0.9em;
+    border-top: 1px solid #d4af37;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+input, select, textarea {
+    background-color: #1c1c1c;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    border-radius: 5px;
+    padding: 10px;
+    font-family: 'Friz Quadrata', sans-serif;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #f1c40f;
+}
+
+nav {
+    background-color: #1c1c1c; /* Dark background */
+    border-bottom: 2px solid #d4af37; /* Gold border */
+    padding: 10px 20px;
+    font-family: 'Friz Quadrata', sans-serif; /* League of Legends-like font */
+}
+
+nav a {
+    color: #d4af37; /* Gold text */
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+}
+
+nav a:hover {
+    color: #f1c40f; /* Lighter gold on hover */
+}
+
+nav .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #d4af37;
+    width: 10%;
+
+}
+
+nav .menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav .menu-item {
+    margin: 0 10px;
+}
+
+nav .menu-item a {
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+nav .menu-item a:hover {
+    background-color: #f1c40f; /* Lighter gold background on hover */
+    color: #0a0a0a; /* Dark text on hover */
+}
+
+
+form {
+    background-color: #1c1c1c; /* Dark background */
+    border: 2px solid #d4af37; /* Gold border */
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Friz Quadrata', sans-serif; /* League of Legends-like font */
+    color: #d4af37; /* Gold text */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    max-width: 500px;
+    margin: auto;
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="hidden"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #1c1c1c;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    border-radius: 5px;
+    font-family: 'Friz Quadrata', sans-serif;
+}
+
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form input[type="hidden"]:focus {
+    outline: none;
+    border-color: #f1c40f; /* Lighter gold on focus */
+}
+
+form button {
+    background-color: #d4af37;
+    color: #0a0a0a;
+    border: 2px solid #d4af37;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-family: 'Friz Quadrata', sans-serif;
+    cursor: pointer;
+    width: 100%;
+}
+
+form button:hover {
+    background-color: #f1c40f; /* Lighter gold on hover */
+    border-color: #f1c40f;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Friz Quadrata', sans-serif;
+    color: #d4af37;
+    margin: 30px;
+}
+
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Grayed-out background */
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-message {
+    background-color: #1c1c1c; /* Dark background */
+    color: #d4af37; /* Gold text */
+    border: 2px solid #d4af37; /* Gold border */
+    border-radius: 5px;
+    padding: 20px;
+    font-family: 'Friz Quadrata', sans-serif; /* League of Legends-like font */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    z-index: 1001;
 }

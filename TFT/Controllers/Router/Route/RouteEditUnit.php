@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Controllers\Router\Route;
 
+
 use Controllers\Router\Route;
-class RouteAddUnit extends Route
+
+class RouteEditUnit extends Route
 {
+
     // Attribut pour stocker le contrôleur principal (MainController)
     private $controller;
 
@@ -20,22 +21,17 @@ class RouteAddUnit extends Route
     // Méthode GET : appelle la méthode index() du MainController
     public function get($params = [])
     {
-        $this->controller->displayAddUnit();
+        $this->controller->displayAddUnit($params);
     }
 
     // Méthode POST : pour l'instant, ne fait rien
     public function post($params = [])
     {
-        try {
-            $data = [
-                "name" => parent::getParam($_POST, "name", false),
-                "origin" => parent::getParam($_POST, "origin", false),
-                "cost" => parent::getParam($_POST, "cost", false),
-                "urlImg" => parent::getParam($_POST, "urlImg", false)
-            ];
-            echo $this->controller->displayAddUnit($data);
-        } catch (Exception $e) {
-            echo $this->controller->displayAddUnit(['error' => $e->getMessage()]);
-        }
+        $params["name"]  = parent::getParam($_POST, "name", false);
+        $params["origin"]  = parent::getParam($_POST, "origin", false);
+        $params["cost"]  = parent::getParam($_POST, "cost", false);
+        $params["urlImg"]  = parent::getParam($_POST, "urlImg", false);
+        $params["id"]  = parent::getParam($_POST, "id", false);
+        $this->controller->displayAddUnit($params);
     }
 }

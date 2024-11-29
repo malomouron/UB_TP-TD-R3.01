@@ -16,15 +16,11 @@ class MainController {
 
     public function index() : void {
         $allUnits = $this->unitDAO->getAll();
-        $unitByIdExists = $this->unitDAO->getByID('1');
-        $unitByIdDoesNotExist = $this->unitDAO->getByID("idQuiNexistePas");
 
         echo $this->engine->render('home',
         [
             'tftSetName' => 'Remix Rumble',
             'resGetAll' => $allUnits,
-            'resGetByID' => $unitByIdExists,
-            'reGetByIdDontExist' => $unitByIdDoesNotExist
         ]);
     }
 

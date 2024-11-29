@@ -13,7 +13,7 @@ $this->layout('template', ['title' => 'TP TFT']);
                 <button class="edit-btn"><a href="index.php?action=edit-unit&id='.$unit->getId().'">✏️</a></button>
                 <button class="delete-btn"><a href="index.php?action=del-unit&id='.$unit->getId().'">🗑️</a></button>
             </div>
-            <img src="public/img/'.$unit->getUrlImg().'" alt="'.$unit->getName().'" class="card-image">
+            <img src="'.$unit->getUrlImg().'" alt="'.$unit->getName().'" class="card-image">
             <div class="card-body">
                 <div class="abilities">
                     <p>🗡️'.$unit->getOrigin().'</p>
@@ -30,3 +30,12 @@ $this->layout('template', ['title' => 'TP TFT']);
     }
     ?>
 </div>
+<?php
+if (isset($message)) {
+    echo '
+    <div class="popup-overlay">
+        <div class="popup-message">Message: ' . $message . '</div>
+    </div>';
+}
+?>
+<script src="public/js/home.js"></script>

@@ -9,12 +9,13 @@
 <body>
 <header>
     <nav>
-        <ul>
-            <li><a href="index.php?action=add-unit">Add Unit</a></li>
-            <li><a href="index.php?action=add-origin">Add Unit Origin</a></li>
-            <li><a href="index.php?action=search">Search</a></li>
-            <li><a href="index.php">Home</a></li>
-        </ul>
+        <div class="menu">
+            <img src="public/img/logo.png" alt="logo" class="logo">
+            <span class="menu-item"><a href="index.php?action=add-unit">Add Unit</a></span>
+            <span class="menu-item"><a href="index.php?action=add-origin">Add Unit Origin</a></span>
+            <span class="menu-item"><a href="index.php?action=search">Search</a></span>
+            <span class="menu-item"><a href="index.php">Home</a></span>
+        </div>
     </nav>
 </header>
 <main id="contenu">

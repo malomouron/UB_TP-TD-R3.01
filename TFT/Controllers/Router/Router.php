@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Controllers\Router;
 
 use Controllers\MainController;
+use Controllers\Router\Route\RouteAddOrigin;
 use Controllers\Router\Route\RouteAddUnit;
+use Controllers\Router\Route\RouteDeleteUnit;
+use Controllers\Router\Route\RouteEditUnit;
 use Controllers\Router\Route\RouteIndex;
 use Controllers\Router\Route\RouteSearch;
-use Controllers\Router\Route\RouteAddOrigin;
 use Controllers\UnitController;
 use Exception;
 
@@ -35,6 +37,7 @@ class Router
             'main' => new MainController($this->engine),
             'unit' => new UnitController($this->engine),
         ];
+
     }
 
     private function createRouteList()
@@ -44,6 +47,8 @@ class Router
             'add-unit' => new RouteAddUnit($this->ctrlList['unit']),
             'search' => new RouteSearch($this->ctrlList['main']),
             'add-origin' => new RouteAddOrigin($this->ctrlList['unit']),
+            'del-unit' => new RouteDeleteUnit($this->ctrlList['unit']),
+            'edit-unit' => new RouteEditUnit($this->ctrlList['unit']),
         ];
     }
 
