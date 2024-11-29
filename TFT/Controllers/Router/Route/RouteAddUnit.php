@@ -26,10 +26,12 @@ class RouteAddUnit extends Route
     // Méthode POST : pour l'instant, ne fait rien
     public function post($params = [])
     {
+        $origin = [parent::getParam($_POST, "origin1", true), parent::getParam($_POST, "origin2", true), parent::getParam($_POST, "origin3", true)];
+
         try {
             $data = [
                 "name" => parent::getParam($_POST, "name", false),
-                "origin" => parent::getParam($_POST, "origin", false),
+                "origin" => $origin,
                 "cost" => parent::getParam($_POST, "cost", false),
                 "urlImg" => parent::getParam($_POST, "urlImg", false)
             ];

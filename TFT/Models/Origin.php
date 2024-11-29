@@ -3,11 +3,9 @@ declare(strict_types = 1);
 
 namespace Models;
 
-class Unit {
+class Origin {
     private ?string $id;
     private string $name;
-    private int $cost;
-    private array $origin;
     private string $url_img;
 
     // Constructeur
@@ -55,38 +53,6 @@ class Unit {
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCost(): int
-    {
-        return $this->cost;
-    }
-
-    /**
-     * @param int $cost
-     */
-    public function setCost(int $cost): void
-    {
-        $this->cost = $cost;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOrigin(): array
-    {
-        return $this->origin;
-    }
-
-    /**
-     * @param array $origin
-     */
-    public function setOrigin(array $origin): void
-    {
-        $this->origin = $origin;
     }
 
     /**

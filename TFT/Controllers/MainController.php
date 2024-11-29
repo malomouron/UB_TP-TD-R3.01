@@ -16,7 +16,10 @@ class MainController {
 
     public function index() : void {
         $allUnits = $this->unitDAO->getAll();
-
+        foreach ($allUnits as $unit) {
+            $unit->setOrigin($this->unitDAO->getOriginsForUnit($unit->getId()));
+        }
+        var_dump($allUnits);
         echo $this->engine->render('home',
         [
             'tftSetName' => 'Remix Rumble',

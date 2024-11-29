@@ -312,3 +312,12 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     z-index: 1001;
 }
+
+.h2-message{
+    margin: 10px;
+}
+
+.img_origin{
+    width: 20px;
+    padding: 10px;
+}

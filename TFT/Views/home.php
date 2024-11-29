@@ -15,11 +15,13 @@ $this->layout('template', ['title' => 'TP TFT']);
             </div>
             <img src="'.$unit->getUrlImg().'" alt="'.$unit->getName().'" class="card-image">
             <div class="card-body">
-                <div class="abilities">
-                    <p>🗡️'.$unit->getOrigin().'</p>
-                    <p>🗡️'.$unit->getOrigin().'</p>
-                    <p>🗡️'.$unit->getOrigin().'</p>
-                </div>
+                <div class="abilities">';
+            if ($unit && $unit->getOrigin()) {
+                foreach ($unit->getOrigin() as $origin) {
+                    echo '<p><img src="'.$origin->getUrlImg().'" alt="'.$origin->getName().'" class="img_origin">️'.$origin->getName().'</p>';
+                }
+            }
+        echo'   </div>
                 <div class="card-footer">
                     <h4>'.$unit->getName().'</h4>
                     <span class="cost">'.$unit->getCost().'</span>
@@ -30,12 +32,7 @@ $this->layout('template', ['title' => 'TP TFT']);
     }
     ?>
 </div>
-<?php
-if (isset($message)) {
-    echo '
-    <div class="popup-overlay">
-        <div class="popup-message">Message: ' . $message . '</div>
-    </div>';
-}
-?>
+<?php if (isset($message)): ?>
+    <?php $this->insert('message', ['message' => $message]); ?>
+<?php endif; ?>
 <script src="public/js/home.js"></script>

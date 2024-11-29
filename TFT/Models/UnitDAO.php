@@ -14,7 +14,7 @@ class UnitDAO extends BasePDODAO {
         $stmt = $this->execRequest($query);
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $units[] = new Unit(["id" => $row['id'], "name" => $row['name'], "cost" => (int) $row['cost'], "origin" => $row['origin'], "urlImg" => $row['url_img']]);
+            $units[] = new Unit(["id" => $row['id'], "name" => $row['name'], "cost" => (int) $row['cost'], "urlImg" => $row['url_img']]);
         }
 
         return $units;
@@ -26,7 +26,7 @@ class UnitDAO extends BasePDODAO {
         $stmt = $this->execRequest($query, ['id' => $idUnit]);
 
         if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            return new Unit(["id" => $row['id'], "name" => $row['name'], "cost" => (int) $row['cost'], "origin" => $row['origin'], "urlImg" => $row['url_img']]);
+            return new Unit(["id" => $row['id'], "name" => $row['name'], "cost" => (int) $row['cost'], "urlImg" => $row['url_img']]);
         }
 
         return null; // Retourne null si l'ID n'est pas trouvé
@@ -34,8 +34,8 @@ class UnitDAO extends BasePDODAO {
 
     // Méthode pour créer une unité
     public function createUnit(Unit $unit): void {
-        $query = "INSERT INTO UB_TFT_UNIT (id, name, cost, origin, url_img) VALUES (:id, :name, :cost, :origin, :urlImg)";
-        $this->execRequest($query, ['id' => $unit->getId(), 'name' => $unit->getName(), 'cost' => $unit->getCost(), 'origin' => $unit->getOrigin(), 'urlImg' => $unit->getUrlImg()]);
+        $query = "INSERT INTO UB_TFT_UNIT (id, name, cost, url_img) VALUES (:id, :name, :cost, :urlImg)";
+        $this->execRequest($query, ['id' => $unit->getId(), 'name' => $unit->getName(), 'cost' => $unit->getCost(), 'urlImg' => $unit->getUrlImg()]);
     }
 
     // Méthode pour supprimer une unité
@@ -47,8 +47,26 @@ class UnitDAO extends BasePDODAO {
 
     // Méthode pour mettre à jour une unité
     public function editUnitAndIndex(Unit $unit): void {
-        $query = "UPDATE UB_TFT_UNIT SET name = :name, cost = :cost, origin = :origin, url_img = :urlImg WHERE id = :id";
-        $this->execRequest($query, ['id' => $unit->getId(), 'name' => $unit->getName(), 'cost' => $unit->getCost(), 'origin' => $unit->getOrigin(), 'urlImg' => $unit->getUrlImg()]);
+        $query = "UPDATE UB_TFT_UNIT SET name = :name, cost = :cost, url_img = :urlImg WHERE id = :id";
+        $this->execRequest($query, ['id' => $unit->getId(), 'name' => $unit->getName(), 'cost' => $unit->getCost(), 'urlImg' => $unit->getUrlImg()]);
+    }
+
+
+    public function getOriginsForUnit(string $unitId) : array {
+        //join
+        $query = "SELECT * FROM UB_TFT_ORIGIN JOIN UB_TFT_UNITORIGIN ON UB_TFT_ORIGIN.id = UB_TFT_UNITORIGIN.id_origin WHERE UB_TFT_UNITORIGIN.id = :id";
+        $stmt = $this->execRequest($query, ['id' => $unitId]);
+        $origins = [];
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $origins[] = new Origin(["id" => $row['id'], "name" => $row['name'], "urlImg" => $row['url_img']]);
+        }
+        return $origins;
+    }
+
+    public function addOriginToUnit(string $getId, string $origin)
+    {
+        $query = "INSERT INTO UB_TFT_UNITORIGIN (id_origin, id_unit) VALUES (:id_origin, :id_unit)";
+        $this->execRequest($query, ['id_origin' => $origin, 'id_unit' => $getId]);
     }
 }
 

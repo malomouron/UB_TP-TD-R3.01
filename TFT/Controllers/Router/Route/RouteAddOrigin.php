@@ -27,6 +27,14 @@ class RouteAddOrigin extends Route
     // Méthode POST : pour l'instant, ne fait rien
     public function post($params = [])
     {
-        $this->controller->displayAddOrigin();
+        try {
+            $data = [
+                "name" => parent::getParam($_POST, "name", false),
+                "urlImg" => parent::getParam($_POST, "urlImg", false)
+            ];
+            echo $this->controller->displayAddOrigin($data);
+        } catch (Exception $e) {
+            echo $this->controller->displayAddOrigin(['error' => $e->getMessage()]);
+        }
     }
 }
