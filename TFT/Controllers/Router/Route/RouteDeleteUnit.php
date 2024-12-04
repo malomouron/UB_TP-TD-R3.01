@@ -5,35 +5,53 @@ namespace Controllers\Router\Route;
 use Controllers\Router\Route;
 use Exception;
 
+/**
+ * Classe RouteDeleteUnit pour gérer les routes de suppression d'unité.
+ */
 class RouteDeleteUnit extends Route
 {
+    /**
+     * @var $controleur Contrôleur principal (MainController).
+     */
+    private $controleur;
 
-    // Attribut pour stocker le contrôleur principal (MainController)
-    private $controller;
-
-    // Constructeur : initialise le contrôleur et appel le constructeur de la classe parente
-    public function __construct($controller)
+    /**
+     * Constructeur : initialise le contrôleur et appelle le constructeur de la classe parente.
+     *
+     * @param $controleur Contrôleur principal.
+     */
+    public function __construct($controleur)
     {
         parent::__construct();
-        $this->controller = $controller;
+        $this->controleur = $controleur;
     }
 
-    // Méthode GET : appelle la méthode index() du MainController
-    public function get($params = [])
+    /**
+     * Méthode GET : appelle la méthode displayDeleteUnit() du MainController.
+     *
+     * @param array $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function get(array $parametres = []): void
     {
         try {
-            $data = [
+            $donnees = [
                 'id' => parent::getParam($_GET, "id", false),
             ];
-            echo $this->controller->displayDeleteUnit($data);
+            echo $this->controleur->displayDeleteUnit($donnees);
         } catch (Exception $e) {
-            echo $this->controller->displayDeleteUnit(['error' => $e->getMessage()]);
+            echo $this->controleur->displayDeleteUnit(['error' => $e->getMessage()]);
         }
     }
 
-    // Méthode POST : pour l'instant, ne fait rien
-    public function post($params = [])
+    /**
+     * Méthode POST : pour l'instant, ne fait rien.
+     *
+     * @param array $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function post(array $parametres = []): void
     {
-        $this->controller->displayDeleteUnit();
+        $this->controleur->displayDeleteUnit();
     }
 }

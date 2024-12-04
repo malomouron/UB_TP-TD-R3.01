@@ -24,7 +24,7 @@ body {
     overflow: hidden;
     color: white;
     position: relative;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 20px;
 }
 
@@ -139,7 +139,7 @@ button:hover {
     border: 2px solid #d4af37; /* Bordure dorée */
     border-radius: 10px;
     color: #d4af37;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     margin: 20px;
     padding: 20px;
 }
@@ -234,7 +234,7 @@ form {
     padding: 20px;
     font-family: 'Friz Quadrata', sans-serif; /* League of Legends-like font */
     color: #d4af37; /* Gold text */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     max-width: 500px;
     margin: auto;
 }
@@ -308,7 +308,7 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 5px;
     padding: 20px;
     font-family: 'Friz Quadrata', sans-serif; /* League of Legends-like font */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     text-align: center;
     z-index: 1001;
 }

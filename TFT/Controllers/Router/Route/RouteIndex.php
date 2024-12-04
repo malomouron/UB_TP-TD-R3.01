@@ -6,27 +6,46 @@ namespace Controllers\Router\Route;
 
 use Controllers\Router\Route;
 
+/**
+ * Classe RouteIndex pour gérer les routes de l'index.
+ */
 class RouteIndex extends Route
 {
-    // Attribut pour stocker le contrôleur principal (MainController)
-    private $controller;
+    /**
+     * @var $controleur Contrôleur principal (MainController).
+     */
+    private $controleur;
 
-    // Constructeur : initialise le contrôleur et appel le constructeur de la classe parente
-    public function __construct($controller)
+    /**
+     * Constructeur : initialise le contrôleur et appelle le constructeur de la classe parente.
+     *
+     * @param $controleur Contrôleur principal.
+     */
+    public function __construct($controleur)
     {
         parent::__construct();
-        $this->controller = $controller;
+        $this->controleur = $controleur;
     }
 
-    // Méthode GET : appelle la méthode index() du MainController
-    public function get($params = [])
+    /**
+     * Méthode GET : appelle la méthode index() du MainController.
+     *
+     * @param array $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function get(array $parametres = []): void
     {
-        $this->controller->index();
+        $this->controleur->index();
     }
 
-    // Méthode POST : pour l'instant, ne fait rien
-    public function post($params = [])
+    /**
+     * Méthode POST : pour l'instant, ne fait rien.
+     *
+     * @param array $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function post(array $parametres = []): void
     {
-        $this->controller->index();
+        $this->controleur->index();
     }
 }

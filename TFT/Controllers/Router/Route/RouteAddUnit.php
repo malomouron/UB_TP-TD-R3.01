@@ -5,39 +5,65 @@ declare(strict_types=1);
 namespace Controllers\Router\Route;
 
 use Controllers\Router\Route;
+use Exception;
+
+/**
+ * Classe RouteAddUnit pour gérer les routes d'ajout d'unité.
+ */
 class RouteAddUnit extends Route
 {
-    // Attribut pour stocker le contrôleur principal (MainController)
-    private $controller;
+    /**
+     * @var $controleur Contrôleur principal (MainController).
+     */
+    private $controleur;
 
-    // Constructeur : initialise le contrôleur et appel le constructeur de la classe parente
-    public function __construct($controller)
+    /**
+     * Constructeur : initialise le contrôleur et appelle le constructeur de la classe parente.
+     *
+     * @param $controleur Contrôleur principal.
+     */
+    public function __construct($controleur)
     {
         parent::__construct();
-        $this->controller = $controller;
+        $this->controleur = $controleur;
     }
 
-    // Méthode GET : appelle la méthode index() du MainController
-    public function get($params = [])
+    /**
+     * Méthode GET : appelle la méthode displayAddUnit() du MainController.
+     *
+     * @param array $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function get(array $parametres = []): void
     {
-        $this->controller->displayAddUnit();
+        $this->controleur->displayAddUnit();
     }
 
-    // Méthode POST : pour l'instant, ne fait rien
-    public function post($params = [])
+    /**
+     * Méthode POST : traite les données du formulaire et appelle la méthode displayAddUnit() du MainController.
+     *
+     * @param array $parametres Paramètres de la requête.
+     * @return void
+     * @throws Exception Si une erreur survient.
+     */
+    public function post(array $parametres = []): void
     {
-        $origin = [parent::getParam($_POST, "origin1", true), parent::getParam($_POST, "origin2", true), parent::getParam($_POST, "origin3", true)];
+        $origines = [
+            parent::getParam($_POST, "origin1"),
+            parent::getParam($_POST, "origin2"),
+            parent::getParam($_POST, "origin3")
+        ];
 
         try {
-            $data = [
+            $donnees = [
                 "name" => parent::getParam($_POST, "name", false),
-                "origin" => $origin,
+                "origin" => $origines,
                 "cost" => parent::getParam($_POST, "cost", false),
                 "urlImg" => parent::getParam($_POST, "urlImg", false)
             ];
-            echo $this->controller->displayAddUnit($data);
+            echo $this->controleur->displayAddUnit($donnees);
         } catch (Exception $e) {
-            echo $this->controller->displayAddUnit(['error' => $e->getMessage()]);
+            echo $this->controleur->displayAddUnit(['erreur' => $e->getMessage()]);
         }
     }
 }

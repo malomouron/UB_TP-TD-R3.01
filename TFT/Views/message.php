@@ -6,4 +6,3 @@ echo '
         Message: ' . $message->getMessage() . '
     </div>
 </div>';
-?>

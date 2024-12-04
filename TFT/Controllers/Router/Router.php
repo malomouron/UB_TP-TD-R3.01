@@ -13,59 +13,99 @@ use Controllers\Router\Route\RouteIndex;
 use Controllers\Router\Route\RouteSearch;
 use Controllers\UnitController;
 use Exception;
+use League\Plates\Engine;
 
+/**
+ * Classe Router pour gérer le routage des requêtes.
+ */
 class Router
 {
-    // Attributs
-    private $routeList = [];  // Liste des routes (ex: 'index' => RouteIndex)
-    private $ctrlList = [];   // Liste des contrôleurs (ex: 'main' => MainController)
-    private $action_key;      // La clé d'action dans $_GET, par défaut "action"
+    /**
+     * @var array $listeRoutes Liste des routes (ex: 'index' => RouteIndex).
+     */
+    private array $listeRoutes = [];
 
-    private $engine;        // Moteur de templates
+    /**
+     * @var array $listeControleurs Liste des contrôleurs (ex: 'main' => MainController).
+     */
+    private array $listeControleurs = [];
 
-    public function __construct($template, $name_of_action_key = 'action')
+    /**
+     * @var string $cleAction La clé d'action dans $_GET, par défaut "action".
+     */
+    private string $cleAction;
+
+    /**
+     * @var Engine $moteur Moteur de templates.
+     */
+    private Engine $moteur;
+
+    /**
+     * Constructeur : initialise le moteur de templates et la clé d'action.
+     *
+     * @param Engine $template Moteur de templates.
+     * @param string $nomCleAction Nom de la clé d'action.
+     */
+    public function __construct(Engine $template, string $nomCleAction = 'action')
     {
-        $this->action_key = $name_of_action_key;
-        $this->engine = $template;
-        $this->createControllerList();
-        $this->createRouteList();
+        $this->cleAction = $nomCleAction;
+        $this->moteur = $template;
+        $this->creerListeControleurs();
+        $this->creerListeRoutes();
     }
 
-    private function createControllerList()
+    /**
+     * Crée la liste des contrôleurs.
+     *
+     * @return void
+     */
+    private function creerListeControleurs(): void
     {
-        $this->ctrlList = [
-            'main' => new MainController($this->engine),
-            'unit' => new UnitController($this->engine),
+        $this->listeControleurs = [
+            'main' => new MainController($this->moteur),
+            'unit' => new UnitController($this->moteur),
         ];
-
     }
 
-    private function createRouteList()
+    /**
+     * Crée la liste des routes.
+     *
+     * @return void
+     */
+    private function creerListeRoutes(): void
     {
-        $this->routeList = [
-            'index' => new RouteIndex($this->ctrlList['main']),
-            'add-unit' => new RouteAddUnit($this->ctrlList['unit']),
-            'search' => new RouteSearch($this->ctrlList['main']),
-            'add-origin' => new RouteAddOrigin($this->ctrlList['unit']),
-            'del-unit' => new RouteDeleteUnit($this->ctrlList['unit']),
-            'edit-unit' => new RouteEditUnit($this->ctrlList['unit']),
+        $this->listeRoutes = [
+            'index' => new RouteIndex($this->listeControleurs['main']),
+            'add-unit' => new RouteAddUnit($this->listeControleurs['unit']),
+            'search' => new RouteSearch($this->listeControleurs['unit']),
+            'add-origin' => new RouteAddOrigin($this->listeControleurs['unit']),
+            'del-unit' => new RouteDeleteUnit($this->listeControleurs['unit']),
+            'edit-unit' => new RouteEditUnit($this->listeControleurs['unit']),
         ];
     }
 
-    public function routing($get, $post)
+    /**
+     * Gère le routage des requêtes en fonction des paramètres GET et POST.
+     *
+     * @param array $get Paramètres GET.
+     * @param array $post Paramètres POST.
+     * @return void
+     * @throws Exception Si la route n'est pas trouvée.
+     */
+    public function routing(array $get, array $post): void
     {
-        if (isset($get[$this->action_key])) {
-            $routeKey = $get[$this->action_key];
+        if (isset($get[$this->cleAction])) {
+            $cleRoute = $get[$this->cleAction];
 
-            if (isset($this->routeList[$routeKey])) {
-                $method = !empty($post) ? 'POST' : 'GET'; // Vérifie si c'est une requête POST ou GET
-                $this->routeList[$routeKey]->action($get, $method);
+            if (isset($this->listeRoutes[$cleRoute])) {
+                $methode = !empty($post) ? 'POST' : 'GET'; // Vérifie si c'est une requête POST ou GET
+                $this->listeRoutes[$cleRoute]->action($get, $methode);
             } else {
-                throw new Exception("Route '$routeKey' non trouvée.");
+                throw new Exception("Route '$cleRoute' non trouvée.");
             }
         } else {
             // Si aucune action n'est spécifiée, on redirige vers l'index
-            $this->routeList['index']->action($get, 'GET');
+            $this->listeRoutes['index']->action($get, 'GET');
         }
     }
 }

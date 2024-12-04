@@ -2,36 +2,59 @@
 
 namespace Controllers\Router\Route;
 
-
 use Controllers\Router\Route;
+use Exception;
 
+/**
+ * Classe RouteEditUnit pour gérer les routes d'édition d'unité.
+ */
 class RouteEditUnit extends Route
 {
+    /**
+     * @var $controleur Contrôleur principal (MainController).
+     */
+    private $controleur;
 
-    // Attribut pour stocker le contrôleur principal (MainController)
-    private $controller;
-
-    // Constructeur : initialise le contrôleur et appel le constructeur de la classe parente
-    public function __construct($controller)
+    /**
+     * Constructeur : initialise le contrôleur et appelle le constructeur de la classe parente.
+     *
+     * @param $controleur Contrôleur principal.
+     */
+    public function __construct($controleur)
     {
         parent::__construct();
-        $this->controller = $controller;
+        $this->controleur = $controleur;
     }
 
-    // Méthode GET : appelle la méthode index() du MainController
-    public function get($params = [])
+    /**
+     * Méthode GET : appelle la méthode displayAddUnit() du MainController.
+     *
+     * @param array $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function get(array $parametres = []): void
     {
-        $this->controller->displayAddUnit($params);
+        $this->controleur->displayAddUnit($parametres);
     }
 
-    // Méthode POST : pour l'instant, ne fait rien
-    public function post($params = [])
+    /**
+     * Méthode POST : traite les données du formulaire et appelle la méthode displayAddUnit() du MainController.
+     *
+     * @param array $parametres Paramètres de la requête.
+     * @return void
+     * @throws Exception Si une erreur survient.
+     */
+    public function post(array $parametres = []): void
     {
-        $params["name"]  = parent::getParam($_POST, "name", false);
-        $params["origin"]  = parent::getParam($_POST, "origin", false);
-        $params["cost"]  = parent::getParam($_POST, "cost", false);
-        $params["urlImg"]  = parent::getParam($_POST, "urlImg", false);
-        $params["id"]  = parent::getParam($_POST, "id", false);
-        $this->controller->displayAddUnit($params);
+        $parametres["name"] = parent::getParam($_POST, "name", false);
+        $parametres["origin"] = [
+            parent::getParam($_POST, "origin1"),
+            parent::getParam($_POST, "origin2"),
+            parent::getParam($_POST, "origin3")
+        ];
+        $parametres["cost"] = parent::getParam($_POST, "cost", false);
+        $parametres["urlImg"] = parent::getParam($_POST, "urlImg", false);
+        $parametres["id"] = parent::getParam($_POST, "id", false);
+        $this->controleur->displayAddUnit($parametres);
     }
 }

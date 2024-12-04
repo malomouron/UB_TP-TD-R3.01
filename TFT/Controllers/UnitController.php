@@ -3,167 +3,298 @@ declare(strict_types=1);
 
 namespace Controllers;
 
+use Exception;
 use Helpers\Message;
+use InvalidArgumentException;
 use League\Plates\Engine;
 use Models\Origin;
 use Models\OriginDAO;
 use Models\UnitDAO;
 use Models\Unit;
 
+/**
+ * Classe UnitController pour gérer les unités.
+ */
 class UnitController {
-    private Engine $engine;
-    private UnitDAO $unitDAO;
-    private OriginDAO $originDAO;
-    public function __construct(Engine $engine) {
-        $this->engine = $engine;
-        $this->unitDAO = new UnitDAO();
-        $this->originDAO = new OriginDAO();
+    /**
+     * @var Engine $moteur Moteur de templates.
+     */
+    private Engine $moteur;
+
+    /**
+     * @var UnitDAO $uniteDAO Data Access Object pour les unités.
+     */
+    private UnitDAO $uniteDAO;
+
+    /**
+     * @var OriginDAO $origineDAO Data Access Object pour les origines.
+     */
+    private OriginDAO $origineDAO;
+
+    /**
+     * Constructeur : initialise le moteur de templates et les DAOs.
+     *
+     * @param Engine $moteur Moteur de templates.
+     */
+    public function __construct(Engine $moteur) {
+        $this->moteur = $moteur;
+        $this->uniteDAO = new UnitDAO();
+        $this->origineDAO = new OriginDAO();
     }
 
-    public function displayAddUnit($params = null) : void
-    {
-        if (isset($params['error'])) {
-            $message = new Message('Error adding unit: ' . $params['error'], 'Error', 'error');
+    /**
+     * Affiche le formulaire d'ajout d'une unité.
+     *
+     * @param array|null $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function displayAddUnit(array $parametres = null) : void {
+        if (isset($parametres['error'])) {
+            $message = new Message('Erreur lors de l\'ajout de l\'unité : ' . $parametres['error'], 'Erreur', 'error');
             $this->addUnitRender($message);
-        } elseif (isset($params['action']) and $params['action'] == "edit-unit") {
-            if (isset($params['id'])) {
-                if (!isset($params['name'])) {
+        } elseif (isset($parametres['action']) && $parametres['action'] == "edit-unit") {
+            if (isset($parametres['id'])) {
+                if (!isset($parametres['name'])) {
                     try {
-                        $unit = $this->unitDAO->getByID($params['id']);
-                        if ($unit === null) {
-                            $message = new Message('Unit not found', 'Error', 'error');
+                        $unite = $this->uniteDAO->getByID($parametres['id']);
+                        if ($unite === null) {
+                            $message = new Message('Unité non trouvée', 'Erreur', 'error');
                             $this->addUnitRender($message);
                         } else {
-                            echo $this->engine->render('add-unit',
-                                [
-                                    'unit' => [
-                                        'id' => $unit->getId(),
-                                        'name' => $unit->getName(),
-                                        'cost' => $unit->getCost(),
-                                        'urlimg' => $unit->getUrlImg()
-                                    ],
-                                    'originList' => $this->originDAO->getAll()
-                                ]);
+                            echo $this->moteur->render('add-unit', [
+                                'unit' => [
+                                    'id' => $unite->getId(),
+                                    'name' => $unite->getName(),
+                                    'cost' => $unite->getCost(),
+                                    'urlimg' => $unite->getUrlImg(),
+                                    'originList' => $this->uniteDAO->getOriginsForUnit($unite->getId())
+                                ],
+                                'originList' => $this->origineDAO->getAll()
+                            ]);
                         }
-                    } catch (\Exception $e) {
-                        $message = new Message('Error editing unit: ' . $e->getMessage(), 'Error', 'error');
+                    } catch (Exception $e) {
+                        $message = new Message('Erreur lors de la modification de l\'unité : ' . $e->getMessage(), 'Erreur', 'error');
                         $this->addUnitRender($message);
                     }
                 } else {
-                    $this->editUnit($params);
+                    $this->editUnit($parametres);
                 }
             }
-        } elseif (isset($params['name'])) {
-            $params['cost'] = (int) $params['cost'];
-            $this->addUnit($params);
+        } elseif (isset($parametres['name'])) {
+            $parametres['cost'] = (int) $parametres['cost'];
+            $this->addUnit($parametres);
         } else {
             $this->addUnitRender();
         }
     }
 
-    public function displayDeleteUnit($params = null) : void
-    {
-        if (isset($params['error'])) {
-            $message = new Message('Error deleting unit: ' . $params['error'], 'Error', 'error');
+    /**
+     * Affiche le formulaire de suppression d'une unité.
+     *
+     * @param array|null $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function displayDeleteUnit(array $parametres = null) : void {
+        if (isset($parametres['error'])) {
+            $message = new Message('Erreur lors de la suppression de l\'unité : ' . $parametres['error'], 'Erreur', 'error');
             $this->index($message);
         } else {
-            $this->deleteUnit($params['id']);
+            $this->deleteUnit($parametres['id']);
         }
     }
 
-    public function deleteUnit(string $id) : void {
-        try {
-            $rowCount = $this->unitDAO->deleteUnit($id);
-            if ($rowCount === 0) {
-                throw new \Exception('Unit not found');
-            }
-            $message = new Message('Unit successfully deleted!', 'Success', 'success');
-            $this->index($message);
-        } catch (\Exception $e) {
-            $message = new Message('Error deleting unit: ' . $e->getMessage(), 'Error', 'error');
-            $this->index($message);
+    /**
+     * Affiche le formulaire d'ajout d'une origine.
+     *
+     * @param array|null $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function displayAddOrigin(array $parametres = null) : void {
+        if (isset($parametres['error'])) {
+            $message = new Message('Erreur lors de l\'ajout de l\'origine : ' . $parametres['error'], 'Erreur', 'error');
+            echo $this->moteur->render('add-origin', ['message' => $message]);
+        } elseif (isset($parametres['name'])) {
+            $this->addOrigin($parametres);
+        } else {
+            echo $this->moteur->render('add-origin');
         }
     }
 
-    public function addUnit(array $unitData) : void {
+
+    /**
+     * Affiche le formulaire de recherche.
+     *
+     * @param array|null $parametres Paramètres de la requête.
+     * @return void
+     */
+    public function displaySearch(array $parametres = null) : void {
+        if (isset($parametres['search']) || isset($parametres['origin'])) {
+            $this->search($parametres);
+        } else {
+            echo $this->moteur->render('search');
+        }
+    }
+
+    /**
+     * Affiche la page d'accueil avec toutes les unités.
+     *
+     * @param Message $message Message à afficher.
+     * @return void
+     */
+    public function index(Message $message) : void {
+        $toutesUnites = $this->uniteDAO->getAll();
+        foreach ($toutesUnites as $unite) {
+            $unite->setOrigin($this->uniteDAO->getOriginsForUnit($unite->getId()));
+        }
+        echo $this->moteur->render('home', [
+            'tftSetName' => 'Remix Rumble',
+            'resGetAll' => $toutesUnites,
+            'message' => $message
+        ]);
+    }
+
+    /**
+     * Affiche le formulaire d'ajout d'une unité avec un message.
+     *
+     * @param Message|null $message Message à afficher.
+     * @return void
+     */
+    public function addUnitRender(Message $message = null) : void {
+        if ($message === null) {
+            echo $this->moteur->render('add-unit', ['originList' => $this->origineDAO->getAll()]);
+        } else {
+            echo $this->moteur->render('add-unit', ['message' => $message, 'originList' => $this->origineDAO->getAll()]);
+        }
+    }
+
+
+
+
+
+
+
+
+    /**
+     * Ajoute une unité.
+     *
+     * @param array $donneesUnite Données de l'unité.
+     * @return void
+     */
+    public function addUnit(array $donneesUnite) : void {
         try {
-            $unitextract =[ 'name' => $unitData['name'], 'cost' => $unitData['cost'], 'urlImg' => $unitData['urlImg']];
-            $unitextract['id'] = uniqid();
-            $unit = new Unit($unitextract);
-            $this->unitDAO->createUnit($unit);
-            $originList = $unitData['origin'];
-            foreach ($originList as $origin) {
-                if ($origin !== "") {
-                    $this->unitDAO->addOriginToUnit($unit->getId(), $origin);
+            $uniteData = [
+                'name' => $donneesUnite['name'],
+                'cost' => $donneesUnite['cost'],
+                'urlImg' => $donneesUnite['urlImg'],
+                'id' => uniqid()
+            ];
+            $unite = new Unit($uniteData);
+            $this->uniteDAO->createUnit($unite);
+            $listeOrigines = array_unique($donneesUnite['origin']);
+            foreach ($listeOrigines as $origine) {
+                if ($origine !== "") {
+                    $this->uniteDAO->addOriginToUnit($unite->getId(), $origine);
                 }
             }
-            $message = new Message('Unit successfully created!', 'Success', 'success');
-        } catch (\Exception $e) {
-            $message = new Message('Error creating unit: ' . $e->getMessage(), 'Error', 'error');
+            $message = new Message('Unité créée avec succès!', 'Succès', 'success');
+        } catch (Exception $e) {
+            $message = new Message('Erreur lors de la création de l\'unité : ' . $e->getMessage(), 'Erreur', 'error');
         }
         $this->addUnitRender($message);
     }
 
-    public function editUnit(array $dataUnit) : void {
+    /**
+     * Modifie une unité.
+     *
+     * @param array $donneesUnite Données de l'unité.
+     * @return void
+     */
+    public function editUnit(array $donneesUnite) : void {
         try {
-            $dataUnit['cost'] = (int) $dataUnit['cost'];
-            $unit = new Unit($dataUnit);
-            $this->unitDAO->editUnitAndIndex($unit);
-            $message = new Message('Unit successfully edited!', 'Success', "success");
+            $donneesUnite['cost'] = (int) $donneesUnite['cost'];
+            $uniteData = [
+                'name' => $donneesUnite['name'],
+                'cost' => $donneesUnite['cost'],
+                'urlImg' => $donneesUnite['urlImg'],
+                'id' => $donneesUnite['id']
+            ];
+            $unite = new Unit($uniteData);
+            $this->uniteDAO->editUnitAndIndex($unite);
+            $listeOrigines = array_unique($donneesUnite['origin']);
+            $this->uniteDAO->deleteOriginForUnit($unite->getId());
+            foreach ($listeOrigines as $origine) {
+                if ($origine !== "") {
+                    $this->uniteDAO->addOriginToUnit($unite->getId(), $origine);
+                }
+            }
+            $message = new Message('Unité modifiée avec succès!', 'Succès', 'success');
             $this->index($message);
-        } catch (\Exception $e) {
-            $message = new Message('Error editing unit: ' . $e->getMessage(), 'Error', 'error');
+        } catch (Exception $e) {
+            $message = new Message('Erreur lors de la modification de l\'unité : ' . $e->getMessage(), 'Erreur', 'error');
             $this->addUnitRender($message);
         }
     }
 
-
-
-
-    public function displayAddOrigin($params = null) : void
-    {
-        if (isset($params['error'])) {
-            $message = new Message('Error adding origin: ' . $params['error'], 'Error', 'error');
-            echo $this->engine->render('add-origin', ['message' => $message]);
-        } elseif (isset($params['name'])) {
-            $this->addOrigin($params);
-        } else {
-            echo $this->engine->render('add-origin');
+    /**
+     * Supprime une unité.
+     *
+     * @param string $id Identifiant de l'unité.
+     * @return void
+     */
+    public function deleteUnit(string $id) : void {
+        try {
+            $rowCount = $this->uniteDAO->deleteUnit($id);
+            if ($rowCount === 0) {
+                throw new Exception('Unité non trouvée');
+            }
+            $message = new Message('Unité supprimée avec succès!', 'Succès', 'success');
+            $this->index($message);
+        } catch (Exception $e) {
+            $message = new Message('Erreur lors de la suppression de l\'unité : ' . $e->getMessage(), 'Erreur', 'error');
+            $this->index($message);
         }
     }
 
-    public function addOrigin(array $originData)
-    {
+    /**
+     * Ajoute une origine.
+     *
+     * @param array $donneesOrigine Données de l'origine.
+     * @return void
+     */
+    public function addOrigin(array $donneesOrigine) : void {
         try {
-            $origin = new Origin($originData);
-            $this->originDAO->createOrigin($origin);
-            $message = new Message('Origin successfully created!', 'Success', 'success');
-        } catch (\Exception $e) {
-            $message = new Message('Error creating origin: ' . $e->getMessage(), 'Error', 'error');
+            $origine = new Origin($donneesOrigine);
+            $this->origineDAO->createOrigin($origine);
+            $message = new Message('Origine créée avec succès!', 'Succès', 'success');
+        } catch (Exception $e) {
+            $message = new Message('Erreur lors de la création de l\'origine : ' . $e->getMessage(), 'Erreur', 'error');
         }
         $this->index($message);
     }
 
-    public function index(Message $message) : void {
-        $allUnits = $this->unitDAO->getAll();
-        foreach ($allUnits as $unit) {
-            $unit->setOrigin($this->unitDAO->getOriginsForUnit($unit->getId()));
-        }
 
-        echo $this->engine->render('home',
-            [
-                'tftSetName' => 'Remix Rumble',
-                'resGetAll' => $allUnits,
-                'message' => $message
-            ]);
-    }
 
-    public function addUnitRender($message = null) : void
-    {
-        if ($message === null) {
-            echo $this->engine->render('add-unit', ['originList' => $this->originDAO->getAll()]);
-        } else {
-            echo $this->engine->render('add-unit', ['message' => $message, 'originList' => $this->originDAO->getAll()] );
+    /**
+     * Effectue une recherche d'unités.
+     *
+     * @param array $requete Paramètres de la recherche.
+     * @return void
+     */
+    public function search(array $requete) : void {
+        try {
+            if (isset($requete['search']) && $requete["origin"] == "") {
+                $resultats = $this->uniteDAO->searchByName($requete['search']);
+                echo $this->moteur->render('search', ['results' => $resultats, 'message' => new Message('Résultats', 'Succès', 'success')]);
+            } elseif (isset($requete['origin']) && $requete["search"] == "") {
+                $resultats = $this->uniteDAO->searchByOrigin($requete['origin']);
+                echo $this->moteur->render('search', ['results' => $resultats, 'message' => new Message('Résultats', 'Succès', 'success')]);
+            } else {
+                throw new InvalidArgumentException("Paramètres de recherche invalides");
+            }
+        } catch (InvalidArgumentException $e) {
+            echo $this->moteur->render('search', ['message' => new Message($e->getMessage(), 'Erreur', 'error')]);
+        } catch (Exception $e) {
+            echo $this->moteur->render('search', ['message' => new Message('Erreur lors de la recherche : ' . $e->getMessage(), 'Erreur', 'error')]);
         }
     }
 }

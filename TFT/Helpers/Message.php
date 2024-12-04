@@ -1,11 +1,26 @@
 <?php
 declare(strict_types=1);
+
 namespace Helpers;
 
+/**
+ * Classe Message pour gérer les messages avec titre et couleur.
+ */
 class Message
 {
+    /**
+     * @var string $message Contenu du message.
+     */
     private string $message;
+
+    /**
+     * @var string $color Couleur du message.
+     */
     private string $color;
+
+    /**
+     * @var string $title Titre du message.
+     */
     private string $title;
 
     private const MESSAGE_COLOR_SUCCESS = '#28a745';
@@ -14,35 +29,15 @@ class Message
     private const MESSAGE_COLOR_INFO = '#d4af37';
 
     /**
-     * @return string
+     * Constructeur : initialise le message, le titre et la couleur.
+     *
+     * @param string $message Contenu du message.
+     * @param string $title Titre du message.
+     * @param string $color Couleur du message (par défaut vide).
      */
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
-
-    /**
-     * @return string
-     */
-    public function getColor(): string
-    {
-        return $this->color;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-
-
     public function __construct(string $message, string $title, string $color = "")
     {
         $this->message = $message;
-        $this->color = $color;
         $this->title = $title;
         switch ($color) {
             case 'success':
@@ -58,5 +53,35 @@ class Message
                 $this->color = self::MESSAGE_COLOR_INFO;
                 break;
         }
+    }
+
+    /**
+     * Récupère le contenu du message.
+     *
+     * @return string Contenu du message.
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
+
+    /**
+     * Récupère la couleur du message.
+     *
+     * @return string Couleur du message.
+     */
+    public function getColor(): string
+    {
+        return $this->color;
+    }
+
+    /**
+     * Récupère le titre du message.
+     *
+     * @return string Titre du message.
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 }
